@@ -23,6 +23,9 @@ func SetupGuestRoutes(c *RouteConfig) {
 	auth := route.Group("/auth")
 	auth.Post("/register", c.UserController.Register)
 	auth.Post("/login", c.UserController.Login)
+		// GET endpoints accessible to all authenticated users
+	route.Get("/", c.EduToolsController.List)
+	route.Get("/:id", c.EduToolsController.Get)
 }
 
 func SetupProtectedRoutes(c *RouteConfig) {
@@ -31,9 +34,9 @@ func SetupProtectedRoutes(c *RouteConfig) {
 	route.Get("/profile", c.UserController.Profile)
 
 	edu := route.Group("/edu-tools")
-	edu.Post("/", c.EduToolsController.Create)
-	edu.Get("/", c.EduToolsController.List)
-	edu.Get("/:id", c.EduToolsController.Get)
-	edu.Put("/:id", c.EduToolsController.Update)
-	edu.Delete("/:id", c.EduToolsController.Delete)
+	// Admin only endpoints
+	adminMiddleware := middleware.RoleMiddleware("admin")
+	edu.Post("/", adminMiddleware, c.EduToolsController.Create)
+	edu.Put("/:id", adminMiddleware, c.EduToolsController.Update)
+	edu.Delete("/:id", adminMiddleware, c.EduToolsController.Delete)
 }
