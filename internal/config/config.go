@@ -9,13 +9,19 @@ import (
 )
 
 func ConnectDB() (*gorm.DB, error) {
-	dsn := "root@tcp(localhost:3306)/nutrimama?parseTime=true"
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
 
-    fmt.Printf("Connecting to database '%s' at %s:%s as user '%s'\n",
-        os.Getenv("DB_NAME"),
-        os.Getenv("DB_HOST"),
-        os.Getenv("DB_PORT"),
-        os.Getenv("DB_USER"),
-    )
-    return gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbUser, dbPassword, dbHost, dbPort, dbName)
+
+	fmt.Printf("Connecting to database '%s' at %s:%s as user '%s'\n",
+		dbName,
+		dbHost,
+		dbPort,
+		dbUser,
+	)
+	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
 }
