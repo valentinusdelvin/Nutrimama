@@ -11,6 +11,19 @@ services:
     volumes:
       - .env:/app/.env
 
+  migrate:
+    image: migrate/migrate
+    container_name: daris_migrate
+    env_file: .env
+    volumes:
+      - ./db/migrations:/migrations
+    command:
+      - -path=/migrations
+      - -database=mysql://${DB_USER}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_NAME}
+      - up
+    networks:
+      - mariadb_network
+
 networks:
   mariadb_network:
     external: true
