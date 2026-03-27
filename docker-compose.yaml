@@ -1,6 +1,6 @@
 services:
   app:
-    build: .
+    image: valentinusdelvin/nutrimama:latest
     container_name: daris_be
     restart: unless-stopped
     env_file: .env
@@ -8,21 +8,21 @@ services:
       - "127.0.0.1:3014:${APPPORT}"
     networks:
       - mariadb_network
-    volumes:
-      - .env:/app/.env
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    environment:
+      - TZ=Asia/Jakarta
 
-  migrate:
-    image: migrate/migrate
-    container_name: daris_migrate
-    env_file: .env
+  watchtower:
+    image: containrrr/watchtower
+    container_name: daris_watchtower
     volumes:
-      - ./db/migrations:/migrations
+      - /var/run/docker.sock:/var/run/docker.sock
     command:
-      - -path=/migrations
-      - -database=mysql://${DB_USER}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_NAME}
-      - up
-    networks:
-      - mariadb_network
+      - "--label-enable"
+      - "--interval"
+      - "300"
+      - "--rolling-restart"
 
 networks:
   mariadb_network:
