@@ -12,6 +12,22 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     environment:
       - TZ=Asia/Jakarta
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  migrate:
+    image: migrate/migrate
+    container_name: daris_migrate
+    volumes:
+      - ./db/migrations:/migrations
+    command:
+      - "-path=/migrations"
+      - "-database=mysql://${DB_USER}:${DB_PASSWORD}@tcp(${DB_HOST}:${DB_PORT})/${DB_NAME}"
+      - "up"
+    env_file: .env
+    networks:
+      - mariadb_network
 
   watchtower:
     image: containrrr/watchtower
