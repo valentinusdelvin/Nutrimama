@@ -6,7 +6,7 @@ services:
       env_file: .env
       dockerfile: Dockerfile
     ports:
-      - "3009:{APPPORT}"
+      - "3014:{APPPORT}"
     networks:
       - mariadb_network
 
