@@ -6,4 +6,5 @@ type Consultant struct {
 	FullName     string   `gorm:"column:full_name"`
 	FacilityName *string  `gorm:"column:facility_name"`
 	Rating       *float64 `gorm:"column:rating"`
+	HourlyRate   float64  `gorm:"column:hourly_rate"`
 }

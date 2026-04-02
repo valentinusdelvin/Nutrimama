@@ -1,0 +1,278 @@
+{
+	"info": {
+		"name": "Nutrimama Complete REST API",
+		"description": "Unified endpoints covering Edu Tools (Admin/User), Bookmarks, Consultations, and Live Chat.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Educational Tools",
+			"item": [
+				{
+					"name": "Get All Edu Tools (Public/User)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/edu-tools",
+							"host": ["{{base_url}}"],
+							"path": ["api", "edu-tools"]
+						}
+					}
+				},
+				{
+					"name": "Get Specific Edu Tool (Public/User)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/edu-tools/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "edu-tools", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Edu Tool (Admin Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Pregnancy Diet Guide\",\r\n    \"publisher\": \"Nutrimama Health\",\r\n    \"content\": \"Eat plenty of iron and folate...\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/edu-tools",
+							"host": ["{{base_url}}"],
+							"path": ["api", "edu-tools"]
+						}
+					}
+				},
+				{
+					"name": "Update Edu Tool (Admin Only)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Pregnancy Diet Guide\",\r\n    \"publisher\": \"Nutrimama Editor\",\r\n    \"content\": \"Updated content for mothers...\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/edu-tools/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "edu-tools", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Edu Tool (Admin Only)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/edu-tools/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "edu-tools", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Bookmarks",
+			"item": [
+				{
+					"name": "Toggle Bookmark (Idempotent)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"edu_tools_id\": 1\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/bookmarks/toggle",
+							"host": ["{{base_url}}"],
+							"path": ["api", "bookmarks", "toggle"]
+						}
+					}
+				},
+				{
+					"name": "Get User Bookmarks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/bookmarks",
+							"host": ["{{base_url}}"],
+							"path": ["api", "bookmarks"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Consultations",
+			"item": [
+				{
+					"name": "Book Session (Mother limits bounds to Today)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{mother_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"consultant_id\": 1,\r\n    \"start_time\": \"14:00\",\r\n    \"duration_hours\": 2\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/consultations/book",
+							"host": ["{{base_url}}"],
+							"path": ["api", "consultations", "book"]
+						}
+					}
+				},
+				{
+					"name": "End Session (:id is the consultation_id)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{mother_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/consultations/1/end",
+							"host": ["{{base_url}}"],
+							"path": ["api", "consultations", "1", "end"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Chat Module",
+			"item": [
+				{
+					"name": "Send Message (Only valid if Time exactly aligns)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{mother_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"consultation_id\": 1,\r\n    \"message\": \"Hello, this is my first locked message!\"\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/chat/send",
+							"host": ["{{base_url}}"],
+							"path": ["api", "chat", "send"]
+						}
+					}
+				},
+				{
+					"name": "Get Chat History (:id is the consultation_id)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{mother_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/chat/history/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "chat", "history", "1"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "admin_token",
+			"value": "PASTE_ADMIN_JWT_HERE"
+		},
+		{
+			"key": "user_token",
+			"value": "PASTE_USER_JWT_HERE"
+		},
+		{
+			"key": "mother_token",
+			"value": "PASTE_MOTHER_JWT_HERE"
+		}
+	]
+}

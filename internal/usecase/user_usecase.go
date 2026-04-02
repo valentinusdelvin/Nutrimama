@@ -93,9 +93,10 @@ func (u *UserUseCase) UpdateMotherProfile(userId int, req model.EditMotherProfil
 	c := u.DB.Begin()
 
 	mother, err := u.MotherRepository.FindByUserId(c, userId)
+	isNew := false
 	if err != nil {
-		c.Rollback()
-		return nil, errors.New("mother profile not found")
+		isNew = true
+		mother = &entity.Mother{UserID: userId}
 	}
 
 	mother.FullName = req.FullName
@@ -112,7 +113,13 @@ func (u *UserUseCase) UpdateMotherProfile(userId int, req model.EditMotherProfil
 		mother.Height = req.Height
 	}
 
-	if err := u.MotherRepository.Update(c, mother); err != nil {
+	if isNew {
+		err = u.MotherRepository.Create(c, mother)
+	} else {
+		err = u.MotherRepository.Update(c, mother)
+	}
+
+	if err != nil {
 		c.Rollback()
 		return nil, err
 	}
@@ -128,9 +135,10 @@ func (u *UserUseCase) UpdateConsultantProfile(userId int, req model.EditConsulta
 	c := u.DB.Begin()
 
 	consultant, err := u.ConsultantRepository.FindByUserId(c, userId)
+	isNew := false
 	if err != nil {
-		c.Rollback()
-		return nil, errors.New("consultant profile not found")
+		isNew = true
+		consultant = &entity.Consultant{UserID: userId}
 	}
 
 	consultant.FullName = req.FullName
@@ -138,7 +146,13 @@ func (u *UserUseCase) UpdateConsultantProfile(userId int, req model.EditConsulta
 		consultant.FacilityName = req.FacilityName
 	}
 
-	if err := u.ConsultantRepository.Update(c, consultant); err != nil {
+	if isNew {
+		err = u.ConsultantRepository.Create(c, consultant)
+	} else {
+		err = u.ConsultantRepository.Update(c, consultant)
+	}
+
+	if err != nil {
 		c.Rollback()
 		return nil, err
 	}

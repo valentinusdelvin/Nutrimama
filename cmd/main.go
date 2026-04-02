@@ -22,6 +22,8 @@ func main() {
 		panic("Failed to connect to database: " + err.Error())
 	}
 
+	db, err := config.ConnectDB()
+
 	app := fiber.New()
 	config.Bootstrap(&config.BootstrapConfig{
 		DB:  db,

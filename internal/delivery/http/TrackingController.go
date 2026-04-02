@@ -4,6 +4,7 @@ import (
 	"nutrimama/internal/model"
 	"nutrimama/internal/usecase"
 	"nutrimama/internal/utils"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -45,4 +46,28 @@ func (c *TrackingController) SubmitTracking(ctx *fiber.Ctx) error {
 	}
 
 	return utils.SuccessResponse(ctx, fiber.StatusCreated, "Request Successfull", nil)
+}
+
+func (c *TrackingController) GetScores(ctx *fiber.Ctx) error {
+	var userID int
+	switch v := ctx.Locals("userID").(type) {
+	case int:
+		userID = v
+	case float64:
+		userID = int(v)
+	default:
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "invalid user id in token"})
+	}
+
+	date := ctx.Query("date")
+	if date == "" {
+		date = time.Now().Format("2006-01-02")
+	}
+
+	scores, err := c.TrackingUseCase.GetScores(userID, date)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return utils.SuccessResponse(ctx, fiber.StatusOK, "Successfully fetched live tracking scores", scores)
 }

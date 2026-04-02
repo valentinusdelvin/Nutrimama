@@ -126,14 +126,6 @@ ADD CONSTRAINT `fk_tracking_logs_child`
     FOREIGN KEY (`child_id`) REFERENCES `children`(`child_id`) 
     ON DELETE SET NULL ON UPDATE CASCADE;
 
--- 9. NUTRITION_TRACKING TABLE
-ALTER TABLE `nutrition_tracking`
-ADD CONSTRAINT `fk_nutrition_tracking_mother` 
-    FOREIGN KEY (`mother_id`) REFERENCES `mothers`(`mother_id`) 
-    ON DELETE SET NULL ON UPDATE CASCADE,
-ADD CONSTRAINT `fk_nutrition_tracking_child` 
-    FOREIGN KEY (`child_id`) REFERENCES `children`(`child_id`) 
-    ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- 10. MEAL_PLANS TABLE
 ALTER TABLE `meal_plans`
