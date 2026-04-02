@@ -1,5 +1,5 @@
 CREATE TABLE nutrition_tracking (
-    track_id SERIAL PRIMARY KEY,
+    track_id INT AUTO_INCREMENT PRIMARY KEY,
     mother_id INTEGER REFERENCES mothers(mother_id) ON DELETE CASCADE,
     child_id INTEGER REFERENCES children(child_id) ON DELETE CASCADE,
     tracking_type VARCHAR(20) CHECK (tracking_type IN ('daily', 'weekly', 'monthly')),

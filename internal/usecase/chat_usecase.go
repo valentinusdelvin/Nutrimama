@@ -30,11 +30,25 @@ func (u *ChatUseCase) ValidateSessionAccess(userId int, userRole string, consult
 		return nil, errors.New("consultation session not found")
 	}
 
-	if userRole == "mother" && session.MotherID != userId {
-		return nil, errors.New("unauthorized to access this chat room")
-	}
-	if userRole == "consultant" && session.ConsultantID != userId {
-		return nil, errors.New("unauthorized to access this chat room")
+	var resolvedMotherId, resolvedConsultantId int
+	if userRole == "mother" {
+		var mother entity.Mother
+		if err := u.DB.Where("user_id = ?", userId).First(&mother).Error; err != nil {
+			return nil, errors.New("unauthorized mapping mother structure securely")
+		}
+		resolvedMotherId = mother.MotherID
+		if session.MotherID != resolvedMotherId {
+			return nil, errors.New("unauthorized to access this chat room")
+		}
+	} else if userRole == "consultant" {
+		var consultant entity.Consultant
+		if err := u.DB.Where("user_id = ?", userId).First(&consultant).Error; err != nil {
+			return nil, errors.New("unauthorized mapping consultant structure securely")
+		}
+		resolvedConsultantId = consultant.ConsultantID
+		if session.ConsultantID != resolvedConsultantId {
+			return nil, errors.New("unauthorized to access this chat room")
+		}
 	}
 
 	if !requiresActive {
@@ -87,9 +101,13 @@ func (u *ChatUseCase) SendMessage(userId int, userRole string, req SendMessageRe
 	}
 
 	if userRole == "mother" {
-		msg.MotherID = &userId
+		var mother entity.Mother
+		u.DB.Where("user_id = ?", userId).First(&mother)
+		msg.MotherID = &mother.MotherID
 	} else {
-		msg.ConsultantID = &userId
+		var consultant entity.Consultant
+		u.DB.Where("user_id = ?", userId).First(&consultant)
+		msg.ConsultantID = &consultant.ConsultantID
 	}
 
 	if err := u.MessageRepo.Create(u.DB, &msg); err != nil {

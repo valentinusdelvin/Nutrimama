@@ -120,7 +120,11 @@ func (u *ConsultationUseCase) EndSession(userId int, userRole string, consultati
 	}
 
 	if userRole == "mother" {
-		if session.MotherID != userId {
+		var mother entity.Mother
+		if err := c.Where("user_id = ?", userId).First(&mother).Error; err != nil {
+			return nil, errors.New("unauthorized mapping mother structure securely")
+		}
+		if session.MotherID != mother.MotherID {
 			return nil, errors.New("unauthorized to end this session")
 		}
 		session.Status = "ended"
@@ -130,7 +134,11 @@ func (u *ConsultationUseCase) EndSession(userId int, userRole string, consultati
 		return &session, nil
 
 	} else if userRole == "consultant" {
-		if session.ConsultantID != userId {
+		var consultant entity.Consultant
+		if err := c.Where("user_id = ?", userId).First(&consultant).Error; err != nil {
+			return nil, errors.New("unauthorized mapping consultant structure securely")
+		}
+		if session.ConsultantID != consultant.ConsultantID {
 			return nil, errors.New("unauthorized to end this session")
 		}
 		

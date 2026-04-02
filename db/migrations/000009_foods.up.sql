@@ -1,5 +1,5 @@
 CREATE TABLE foods (
-    food_id SERIAL PRIMARY KEY,
+    food_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     carbohydrates DECIMAL(6,2),
     fat DECIMAL(6,2),
