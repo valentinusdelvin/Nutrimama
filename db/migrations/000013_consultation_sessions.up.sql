@@ -1,5 +1,5 @@
 CREATE TABLE consultation_sessions (
-    consultation_id INT AUTO_INCREMENT PRIMARY KEY,
+    consultation_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     mother_id INTEGER NOT NULL REFERENCES mothers(mother_id) ON DELETE CASCADE,
     consultant_id INTEGER NOT NULL REFERENCES consultants(consultant_id) ON DELETE CASCADE,
     session_date DATE NOT NULL,

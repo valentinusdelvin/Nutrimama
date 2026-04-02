@@ -1,5 +1,5 @@
 CREATE TABLE children (
-    child_id INT AUTO_INCREMENT PRIMARY KEY,
+    child_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     pregnancy_id INT REFERENCES pregnancies(pregnancy_id),
     mother_id INT REFERENCES mothers(mother_id) ON DELETE CASCADE,
     birth_date DATE NOT NULL,

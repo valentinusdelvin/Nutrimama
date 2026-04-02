@@ -1,5 +1,5 @@
 CREATE TABLE messages (
-    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    message_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     consultant_id INTEGER REFERENCES consultants(consultant_id) ON DELETE SET NULL,
     mother_id INTEGER REFERENCES mothers(mother_id) ON DELETE SET NULL,
     message TEXT NOT NULL,

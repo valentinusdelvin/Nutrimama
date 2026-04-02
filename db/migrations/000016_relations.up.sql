@@ -62,8 +62,7 @@ ALTER TABLE `user_bookmarks`
 
 -- 14. Fix questions table
 ALTER TABLE `questions`
-    MODIFY `question_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `schedule_id` bigint UNSIGNED NULL;
+    MODIFY `question_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 -- 15. Fix question_options table
 ALTER TABLE `question_options`
