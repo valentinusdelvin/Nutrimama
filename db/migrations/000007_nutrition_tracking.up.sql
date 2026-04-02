@@ -1,7 +1,7 @@
 CREATE TABLE nutrition_tracking (
     track_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    mother_id INTEGER REFERENCES mothers(mother_id) ON DELETE CASCADE,
-    child_id INTEGER REFERENCES children(child_id) ON DELETE CASCADE,
+    mother_id BIGINT UNSIGNED REFERENCES mothers(mother_id) ON DELETE CASCADE,
+    child_id BIGINT UNSIGNED REFERENCES children(child_id) ON DELETE CASCADE,
     tracking_type VARCHAR(20) CHECK (tracking_type IN ('daily', 'weekly', 'monthly')),
     
     -- Generic JSON Payload securely holding 0-100% computed metrics dynamically

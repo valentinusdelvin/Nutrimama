@@ -64,7 +64,6 @@ func SetupProtectedRoutes(c *RouteConfig) {
 
 	chat := route.Group("/chat")
 	
-	// Native Upgrade Firewalls securely routing only socket traffic natively gracefully.
 	chat.Use("/ws", func(ctx *fiber.Ctx) error {
 		if websocket.IsWebSocketUpgrade(ctx) {
 			return ctx.Next()

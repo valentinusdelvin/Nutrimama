@@ -1,6 +1,6 @@
 CREATE TABLE meal_plans (
     meal_plan_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    mother_id INTEGER NOT NULL REFERENCES mothers(mother_id) ON DELETE CASCADE,
+    mother_id BIGINT UNSIGNED NOT NULL REFERENCES mothers(mother_id) ON DELETE CASCADE,
     week INTEGER NOT NULL,
     phase VARCHAR(50) NOT NULL
 );

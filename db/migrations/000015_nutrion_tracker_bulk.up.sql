@@ -19,7 +19,7 @@ CREATE TABLE questions (
 
 CREATE TABLE question_options (
     option_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    question_id INT REFERENCES questions(question_id) ON DELETE CASCADE,
+    question_id BIGINT UNSIGNED REFERENCES questions(question_id) ON DELETE CASCADE,
     option_value VARCHAR(100) NOT NULL, 
     option_label VARCHAR(100) NOT NULL, 
     icon_emoji VARCHAR(50), 
@@ -29,9 +29,9 @@ CREATE TABLE question_options (
 
 CREATE TABLE user_tracking_logs (
     tracking_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    mother_id INT REFERENCES mothers(mother_id),
-    pregnancy_id INT REFERENCES pregnancies(pregnancy_id),
-    child_id INT REFERENCES children(child_id),
+    mother_id BIGINT UNSIGNED REFERENCES mothers(mother_id),
+    pregnancy_id BIGINT UNSIGNED REFERENCES pregnancies(pregnancy_id),
+    child_id BIGINT UNSIGNED REFERENCES children(child_id),
     tracking_date DATE NOT NULL,
     frequency VARCHAR(20) CHECK (frequency IN ('daily', 'weekly', 'monthly')),
     

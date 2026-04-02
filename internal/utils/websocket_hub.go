@@ -54,7 +54,7 @@ func (h *ChatHub) BroadcastToRoom(roomID int, payload interface{}) {
 
 	room, ok := h.Rooms[roomID]
 	if !ok {
-		return // Completely skip arrays completely empty logically handling offline safely!
+		return 
 	}
 
 	for conn := range room {

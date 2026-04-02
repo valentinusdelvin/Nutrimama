@@ -1,7 +1,7 @@
 CREATE TABLE food_logs (
     food_log_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    meal_plan_id INTEGER NOT NULL REFERENCES meal_plans(meal_plan_id) ON DELETE CASCADE,
-    food_id INTEGER NOT NULL REFERENCES foods(food_id) ON DELETE CASCADE,
+    meal_plan_id BIGINT UNSIGNED NOT NULL REFERENCES meal_plans(meal_plan_id) ON DELETE CASCADE,
+    food_id BIGINT UNSIGNED NOT NULL REFERENCES foods(food_id) ON DELETE CASCADE,
     log_date DATE NOT NULL,
     eaten BOOLEAN DEFAULT FALSE,
     meal_time TIME

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nutrimama WebSocket Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        input { padding: 8px; width: 400px; margin-bottom: 10px; }
+        button { padding: 8px 15px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 4px;}
+        button:hover { background: #0056b3; }
+        #chatBox { border: 1px solid #ccc; height: 300px; width: 400px; overflow-y: scroll; padding: 10px; margin-top: 10px; background: #f9f9f9; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .msg { color: #333; margin: 5px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>Nutrimama Live WebSocket Bridge</h2>
+    <p>This bypasses any bugs in Postman's HTTP Header parser.</p>
+    
+    <label>Consultation Room ID:</label><br>
+    <input type="number" id="roomId" value="1" style="width: 100px;"><br>
+
+    <label>JWT Token:</label><br>
+    <input type="text" id="token" placeholder="Paste your JWT Token here..."><br>
+
+    <button onclick="connectSocket()">Connect to WebSocket</button>
+    <button onclick="disconnectSocket()" style="background: #dc3545;">Disconnect</button>
+
+    <br><br>
+    
+    <input type="text" id="message" placeholder="Type your live chat message...">
+    <button onclick="sendMessage()" style="background: #28a745;">Broadcast Event</button>
+
+    <div id="chatBox"></div>
+
+    <script>
+        let ws;
+        const chatBox = document.getElementById("chatBox");
+
+        function logEvent(text, cssClass) {
+            const div = document.createElement("div");
+            div.className = cssClass;
+            div.innerText = text;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function connectSocket() {
+            const token = document.getElementById("token").value;
+            const roomId = document.getElementById("roomId").value;
+
+            if (!token || !roomId) {
+                logEvent("Error: Missing Token or Room ID", "error");
+                return;
+            }
+
+            const url = `ws://127.0.0.1:8080/api/chat/ws/${roomId}?token=${token}`;
+            
+            logEvent("Connecting to: " + url, "msg");
+            ws = new WebSocket(url);
+
+            ws.onopen = () => {
+                logEvent("SUCCESSFULLY CONNECTED TO HUB! 🚀", "success");
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                
+                // If the Go backend returned a forced Error mapping
+                if (data.error) {
+                    logEvent("SERVER VALIDATION BLOCK: " + data.error, "error");
+                } else {
+                    logEvent("⬇️ RECEIVED: " + data.message, "msg");
+                }
+            };
+
+            ws.onerror = (error) => {
+                logEvent("Socket Errored! (See console)", "error");
+                console.error(error);
+            };
+
+            ws.onclose = () => {
+                logEvent("Socket connection formally closed.", "error");
+            }
+        }
+
+        function disconnectSocket() {
+            if (ws) {
+                ws.close();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById("message");
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                logEvent("Error: Open a connection first!", "error");
+                return;
+            }
+
+            const payload = { message: input.value };
+            ws.send(JSON.stringify(payload));
+            logEvent("⬆️ SENT: " + input.value, "msg");
+            input.value = "";
+        }
+    </script>
+</body>
+</html>

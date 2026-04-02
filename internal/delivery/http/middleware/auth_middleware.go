@@ -11,13 +11,18 @@ import (
 func AuthMiddleware(u *usecase.UserUseCase) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
-		if authHeader == "" {
+		var tokenStr string
+
+		if authHeader != "" {
+			tokenStr = strings.TrimPrefix(authHeader, "Bearer ")
+		} else if c.Query("token") != "" {
+			tokenStr = c.Query("token") // Natively intercept WebSocket URL parameters smoothly bypassing header limits safely!
+		} else {
 			return c.Status(401).JSON(fiber.Map{
 				"error": "missing token",
 			})
 		}
 
-		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 		
 		claims, err := utils.ValidateToken(tokenStr)
 		if err != nil {
