@@ -71,3 +71,23 @@ func (c *TrackingController) GetScores(ctx *fiber.Ctx) error {
 
 	return utils.SuccessResponse(ctx, fiber.StatusOK, "Successfully fetched live tracking scores", scores)
 }
+
+func (c *TrackingController) GetQuestions(ctx *fiber.Ctx) error {
+	var userID int
+	switch v := ctx.Locals("userID").(type) {
+	case int:
+		userID = v
+	case float64:
+		userID = int(v)
+	default:
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "invalid user id in token"})
+	}
+
+	questions, err := c.TrackingUseCase.GetQuestions(userID)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return utils.SuccessResponse(ctx, fiber.StatusOK, "Request Successfull", questions)
+}
+

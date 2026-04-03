@@ -60,6 +60,7 @@ func SetupProtectedRoutes(c *RouteConfig) {
 	tracking := route.Group("/tracking")
 	tracking.Post("/", c.TrackingController.SubmitTracking)
 	tracking.Get("/", c.TrackingController.GetScores)
+	tracking.Get("/questions", c.TrackingController.GetQuestions)
 
 	notifications := route.Group("/notifications")
 	notifications.Post("/subscribe", c.NotificationController.Subscribe)

@@ -16,10 +16,9 @@ func NewTrackingQuestionRepository() *TrackingQuestionRepository {
 	}
 }
 
-// FindByFrequency fetches all questions that match a particular frequency (daily, weekly, monthly)
-func (r *TrackingQuestionRepository) FindByFrequency(db *gorm.DB, frequency string) ([]entity.Question, error) {
+// FindByCategory fetches all questions for a specific target group (e.g., 'ibu_hamil' or 'balita')
+func (r *TrackingQuestionRepository) FindByCategory(db *gorm.DB, category string) ([]entity.Question, error) {
 	var questions []entity.Question
-	// for now this is a placeholder query that fetches them via the generic repository or assumes mapping.
-	err := db.Find(&questions).Error
+	err := db.Preload("Options").Where("category = ?", category).Order("display_order ASC").Find(&questions).Error
 	return questions, err
 }
