@@ -37,10 +37,12 @@ func Bootstrap(config *BootstrapConfig) {
 	trackingUseCase := usecase.NewTrackingUseCase(config.DB, trackingLogRepo, trackingQuestionRepo, nutritionTrackingRepo, motherRepo)
 	trackingController := http.NewTrackingController(trackingUseCase)
 
+	pushService := service.NewPushService()
+
 	notificationRepo := repository.NewNotificationRepository()
 	pushSubscriptionRepo := repository.NewPushSubscriptionRepository()
 	notificationUseCase := usecase.NewNotificationUseCase(config.DB, notificationRepo, pushSubscriptionRepo)
-	notificationController := http.NewNotificationController(notificationUseCase)
+	notificationController := http.NewNotificationController(notificationUseCase, pushService)
 
 	userBookmarkRepo := repository.NewUserBookmarkRepository()
 	bookmarkUseCase := usecase.NewBookmarkUseCase(config.DB, userBookmarkRepo)
@@ -55,10 +57,17 @@ func Bootstrap(config *BootstrapConfig) {
 	chatUseCase := usecase.NewChatUseCase(config.DB, messageRepo, consultationSessionRepo)
 	chatController := http.NewChatController(chatUseCase, chatHub)
 
-	// --- SERVICES & CRON ---
-	pushService := service.NewPushService()
+	foodRepo := repository.NewFoodRepository()
+	mealPlanUseCase := usecase.NewMealPlanUseCase(config.DB, foodRepo, nutritionTrackingRepo, motherRepo)
+	mealPlanController := http.NewMealPlanController(mealPlanUseCase)
+
 	trackingCron := cron.NewTrackingReminderCron(config.DB, notificationRepo, pushSubscriptionRepo, pushService)
 	trackingCron.Start()
+
+	uploadController := http.NewUploadController()
+
+	consultantUseCaseBridge := usecase.NewConsultantUseCase(config.DB, consultantRepo)
+	pureConsultantController := http.NewConsultantController(consultantUseCaseBridge)
 
 	routeConfig := &route.RouteConfig{
 		App:                    config.App,
@@ -69,6 +78,9 @@ func Bootstrap(config *BootstrapConfig) {
 		BookmarkController:     bookmarkController,
 		ConsultationController: consultationController,
 		ChatController:         chatController,
+		MealPlanController:     mealPlanController,
+		UploadController:       uploadController,
+		PureConsultantController: pureConsultantController,
 	}
 	routeConfig.Setup()
 }

@@ -5,11 +5,11 @@ import (
 	"nutrimama/internal/model"
 )
 
-func UserToResponse(user *entity.User, token string) *model.UserResponse {
+func UserToResponse(user *entity.User, token string, name string) *model.UserResponse {
 	return &model.UserResponse{
 		UserId:      user.ID,
 		Email:       user.Email,
-		PhoneNumber: user.PhoneNumber,
+		Name:        name,
 		Role:        user.Role,
 		Token:     	 token,
 	}

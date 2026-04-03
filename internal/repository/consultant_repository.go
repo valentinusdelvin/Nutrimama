@@ -24,3 +24,26 @@ func (r *ConsultantRepository) FindByUserId(db *gorm.DB, userId int) (*entity.Co
 	}
 	return &consultant, nil
 }
+
+func (r *ConsultantRepository) SearchAndPaginate(db *gorm.DB, search string, page int, limit int) ([]entity.Consultant, int64, error) {
+	var consultants []entity.Consultant
+	var total int64
+
+	query := db.Model(&entity.Consultant{})
+
+	if search != "" {
+		searchTerm := "%" + search + "%"
+		query = query.Where("full_name LIKE ? OR facility_name LIKE ?", searchTerm, searchTerm)
+	}
+
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	offset := (page - 1) * limit
+	if err := query.Offset(offset).Limit(limit).Find(&consultants).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return consultants, total, nil
+}

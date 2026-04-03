@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"nutrimama/internal/entity"
+	"nutrimama/internal/model"
 	"nutrimama/internal/repository"
 	"time"
 
@@ -168,3 +169,71 @@ func (u *ConsultationUseCase) EndSession(userId int, userRole string, consultati
 
 	return nil, errors.New("invalid role mapping securely")
 }
+
+func (u *ConsultationUseCase) GetInboxList(userId int, userRole string) ([]model.InboxItemResponse, error) {
+	var resolvedRoleID int
+	c := u.DB
+
+	if userRole == "mother" {
+		var mother entity.Mother
+		if err := c.Where("user_id = ?", userId).First(&mother).Error; err != nil {
+			return nil, errors.New("unauthorized mapping mother structure securely")
+		}
+		resolvedRoleID = mother.MotherID
+	} else if userRole == "consultant" {
+		var consultant entity.Consultant
+		if err := c.Where("user_id = ?", userId).First(&consultant).Error; err != nil {
+			return nil, errors.New("unauthorized mapping consultant structure securely")
+		}
+		resolvedRoleID = consultant.ConsultantID
+	} else {
+		return nil, errors.New("invalid role mapping payload")
+	}
+
+	sessions, err := u.SessionRepo.FindByRole(c, userRole, resolvedRoleID)
+	if err != nil {
+		return nil, err
+	}
+
+	loc := time.FixedZone("Asia/Jakarta", 7*3600)
+	now := time.Now().In(loc)
+
+	var inboxList []model.InboxItemResponse
+	for _, s := range sessions {
+		displayStatus := s.Status
+		if s.Status == "scheduled" {
+			dateStr := s.SessionDate.Format("2006-01-02")
+			layout := "2006-01-02 15:04:05"
+
+			startDT, errS := time.ParseInLocation(layout, dateStr+" "+s.TimeStart, loc)
+			endDT, errE := time.ParseInLocation(layout, dateStr+" "+s.HourEnd, loc)
+
+			if errS == nil && errE == nil {
+				if now.After(startDT) && now.Before(endDT) {
+					displayStatus = "active"
+				}
+			}
+		}
+
+		item := model.InboxItemResponse{
+			ConsultationID: s.ConsultationID,
+			SessionDate:    s.SessionDate,
+			TimeStart:      s.TimeStart,
+			HourEnd:        s.HourEnd,
+			Status:         displayStatus,
+		}
+
+		if userRole == "mother" {
+			item.PartnerName = s.Consultant.FullName
+			item.PartnerRole = "consultant"
+		} else {
+			item.PartnerName = s.Mother.FullName
+			item.PartnerRole = "mother"
+		}
+
+		inboxList = append(inboxList, item)
+	}
+
+	return inboxList, nil
+}
+

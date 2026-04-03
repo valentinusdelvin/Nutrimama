@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 )
 
@@ -23,6 +24,14 @@ func main() {
 	}
 
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "*",
+		AllowMethods:     "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers, ngrok-skip-browser-warning",
+		ExposeHeaders:    "Content-Length, Content-Type",
+		AllowCredentials: false,
+	}))
 	config.Bootstrap(&config.BootstrapConfig{
 		DB:  db,
 		App: app,

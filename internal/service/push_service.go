@@ -1,25 +1,45 @@
 package service
 
 import (
+	"encoding/json"
 	"log"
+	"os"
+
+	webpush "github.com/SherClockHolmes/webpush-go"
 )
 
-type PushService struct {
-	// If you later use Firebase (FCM), you will store the FCM Client here.
-	// If you use standard Web Push (VAPID), you store the VAPID keys here!
-}
+type PushService struct{}
 
 func NewPushService() *PushService {
 	return &PushService{}
 }
 
-func (s *PushService) SendNotification(deviceToken string, title string, message string) {
-	// =========================================================
-	// PUSH NOTIFICATION SENDER
-	// =========================================================
-	// Depending on your UI preference, here you will implement:
-	//   A. webpush.SendNotification() [If using VAPID]
-	//   B. messaging.Send()           [If using Firebase FCM]
-	
-	log.Printf("[PUSH SENT] To token: %s | Title: %s | Msg: %s\n", deviceToken, title, message)
+// SendNotification sends a real Web Push (VAPID) notification to a browser subscription.
+func (s *PushService) SendNotification(endpoint, p256dh, auth, title, message string) {
+	payload, _ := json.Marshal(map[string]string{
+		"title": title,
+		"body":  message,
+	})
+
+	sub := &webpush.Subscription{
+		Endpoint: endpoint,
+		Keys: webpush.Keys{
+			P256dh: p256dh,
+			Auth:   auth,
+		},
+	}
+
+	resp, err := webpush.SendNotification(payload, sub, &webpush.Options{
+		VAPIDPrivateKey: os.Getenv("VAPID_PRIVATE_KEY"),
+		VAPIDPublicKey:  os.Getenv("VAPID_PUBLIC_KEY"),
+		Subscriber:      os.Getenv("VAPID_EMAIL"),
+		TTL:             30,
+	})
+
+	if err != nil {
+		log.Printf("[PUSH ERROR] Failed to send to %s: %v\n", endpoint, err)
+		return
+	}
+	defer resp.Body.Close()
+	log.Printf("[PUSH SENT] Status %d → %s\n", resp.StatusCode, endpoint)
 }

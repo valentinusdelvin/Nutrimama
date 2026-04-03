@@ -27,7 +27,10 @@ func (u *EduToolsUseCase) Create(req model.CreateEduToolsRequest) (*model.EduToo
 
 	eduTools := entity.EduTools{
 		Publisher: req.Publisher,
+		Slug:      req.Slug,
 		Title:     req.Title,
+		Category:  req.Category,
+		Thumbnail: req.Thumbnail,
 		Content:   req.Content,
 	}
 
@@ -58,6 +61,12 @@ func (u *EduToolsUseCase) Update(req model.UpdateEduToolsRequest) (*model.EduToo
 	if req.Title != "" {
 		eduTools.Title = req.Title
 	}
+	if req.Category != "" {
+		eduTools.Category = req.Category
+	}
+	if req.Thumbnail != "" {
+		eduTools.Thumbnail = req.Thumbnail
+	}
 	if req.Content != "" {
 		eduTools.Content = req.Content
 	}
@@ -74,10 +83,10 @@ func (u *EduToolsUseCase) Update(req model.UpdateEduToolsRequest) (*model.EduToo
 	return converter.EduToolsToResponse(eduTools), nil
 }
 
-func (u *EduToolsUseCase) Get(id int) (*model.EduToolsResponse, error) {
-	eduTools, err := u.EduToolsRepository.Get(u.DB, id)
+func (u *EduToolsUseCase) Get(slug string) (*model.EduToolsResponse, error) {
+	eduTools, err := u.EduToolsRepository.GetBySlug(u.DB, slug)
 	if err != nil {
-		return nil, errors.New("edu tools not found")
+		return nil, errors.New("edu tools not found organically by slug")
 	}
 
 	return converter.EduToolsToResponse(eduTools), nil

@@ -102,7 +102,7 @@ func (c *TrackingReminderCron) checkAndNotifyMother(userId, motherId int, localT
 		subs, _ := c.PushSubRepo.FindByUserId(c.DB, userId)
 
 		for _, sub := range subs {
-			c.PushService.SendNotification(sub.DeviceToken, notif.Title, notif.Message)
+			c.PushService.SendNotification(sub.Endpoint, sub.P256dh, sub.Auth, notif.Title, notif.Message)
 		}
 	}
 }

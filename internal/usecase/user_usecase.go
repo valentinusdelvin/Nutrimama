@@ -57,6 +57,16 @@ func (u *UserUseCase) Create(req model.RegisterRequest) (*model.UserResponse, er
 		return nil, err
 	}
 
+	if req.Role == "mother" {
+		if err := u.MotherRepository.Create(c, &entity.Mother{UserID: user.ID, FullName: req.Name}); err != nil {
+			return nil, err
+		}
+	} else if req.Role == "consultant" {
+		if err := u.ConsultantRepository.Create(c, &entity.Consultant{UserID: user.ID, FullName: req.Name}); err != nil {
+			return nil, err
+		}
+	}
+
 	token, err := utils.GenerateToken(user.ID, user.Email, user.Role)
 	if err != nil {
 		return nil, err
@@ -66,7 +76,7 @@ func (u *UserUseCase) Create(req model.RegisterRequest) (*model.UserResponse, er
 		return nil, err
 	}
 
-	return converter.UserToResponse(&user, token), nil
+	return converter.UserToResponse(&user, token, req.Name), nil
 
 }
 
@@ -86,7 +96,17 @@ func (u *UserUseCase) Login(email string, password string) (*model.UserResponse,
 	if err != nil {
 		return nil, err
 	}
-	return converter.UserToResponse(user, token), nil
+
+	var name string
+	if user.Role == "mother" {
+		mother, _ := u.MotherRepository.FindByUserId(db, user.ID)
+		if mother != nil { name = mother.FullName }
+	} else if user.Role == "consultant" {
+		consultant, _ := u.ConsultantRepository.FindByUserId(db, user.ID)
+		if consultant != nil { name = consultant.FullName }
+	}
+
+	return converter.UserToResponse(user, token, name), nil
 }
 
 func (u *UserUseCase) UpdateMotherProfile(userId int, req model.EditMotherProfileRequest) (*entity.Mother, error) {

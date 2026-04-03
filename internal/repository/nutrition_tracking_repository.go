@@ -21,3 +21,9 @@ func (r *NutritionTrackingRepository) FindByMotherIdDate(db *gorm.DB, motherId i
 	err := db.Where("mother_id = ? AND DATE(created_at) = ?", motherId, date).First(&record).Error
 	return &record, err
 }
+
+func (r *NutritionTrackingRepository) GetLatestTracking(db *gorm.DB, motherId int) (*entity.NutritionTracking, error) {
+	var record entity.NutritionTracking
+	err := db.Where("mother_id = ?", motherId).Order("created_at DESC").First(&record).Error
+	return &record, err
+}

@@ -10,6 +10,9 @@ func EduToolsToResponse(eduTools *entity.EduTools) *model.EduToolsResponse {
 		ID:        eduTools.ID,
 		Publisher: eduTools.Publisher,
 		Title:     eduTools.Title,
+		Slug:      eduTools.Slug,
+		Category:  eduTools.Category,
+		Thumbnail: eduTools.Thumbnail,
 		Content:   eduTools.Content,
 		CreatedAt: eduTools.CreatedAt,
 	}

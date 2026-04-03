@@ -30,3 +30,17 @@ func (r *ConsultationSessionRepository) FindOverlapping(db *gorm.DB, consultantI
 		consultantId, date, end, start).Count(&count).Error
 	return count, err
 }
+
+func (r *ConsultationSessionRepository) FindByRole(db *gorm.DB, role string, roleID int) ([]entity.ConsultationSession, error) {
+	var sessions []entity.ConsultationSession
+	query := db.Preload("Mother").Preload("Consultant")
+	
+	if role == "mother" {
+		query = query.Where("mother_id = ?", roleID)
+	} else if role == "consultant" {
+		query = query.Where("consultant_id = ?", roleID)
+	}
+	
+	err := query.Order("session_date DESC, time_start DESC").Find(&sessions).Error
+	return sessions, err
+}

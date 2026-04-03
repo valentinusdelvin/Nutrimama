@@ -1,8 +1,8 @@
 CREATE TABLE questions (
     question_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     question_text VARCHAR(500) NOT NULL,
-    question_key VARCHAR(100) UNIQUE NOT NULL, -- e.g., "protein_animal", "water_intake"
-    category VARCHAR(50), -- e.g.,daily, weekly, montly
+    question_key VARCHAR(100) UNIQUE NOT NULL, 
+    category VARCHAR(50), 
     input_type VARCHAR(50) CHECK (input_type IN (
         'single_choice', 
         'multiple_choice', 
@@ -11,7 +11,7 @@ CREATE TABLE questions (
         'text',
         'image_upload'
     )),
-    unit VARCHAR(50), -- e.g., "glasses", "grams", "times"
+    unit VARCHAR(50), 
     is_required BOOLEAN DEFAULT TRUE,
     display_order INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

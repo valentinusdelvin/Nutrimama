@@ -12,6 +12,9 @@ type ConsultationSession struct {
 	TotalPrice     float64   `gorm:"column:total_price"`
 	PaymentStatus  string    `gorm:"column:payment_status"`
 	Status         string    `gorm:"column:status"`
+
+	Mother     *Mother     `gorm:"foreignKey:MotherID;references:MotherID"`
+	Consultant *Consultant `gorm:"foreignKey:ConsultantID;references:ConsultantID"`
 }
 
 func (ConsultationSession) TableName() string {

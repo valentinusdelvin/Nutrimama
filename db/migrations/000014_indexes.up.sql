@@ -11,5 +11,4 @@ CREATE INDEX idx_food_logs_food_id ON food_logs(food_id);
 CREATE INDEX idx_consultation_mother_id ON consultation_sessions(mother_id);
 CREATE INDEX idx_consultation_consultant_id ON consultation_sessions(consultant_id);
 CREATE INDEX idx_user_bookmarks_user_id ON user_bookmarks(user_id);
-CREATE INDEX idx_foods_nutrition_id ON foods(nutrition_id);
 CREATE INDEX idx_user_bookmarks_edu_tools_id ON user_bookmarks(edu_tools_id);

@@ -38,8 +38,7 @@ ALTER TABLE `food_logs`
     MODIFY `food_id` bigint UNSIGNED NOT NULL;
 
 ALTER TABLE `foods`
-    MODIFY `food_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `nutrition_id` bigint UNSIGNED NULL;
+    MODIFY `food_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `user_bookmarks`
     MODIFY `bookmark_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,

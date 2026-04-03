@@ -69,7 +69,7 @@ func (u *ChatUseCase) ValidateSessionAccess(userId int, userRole string, consult
 	startStr := fmt.Sprintf("%04d-%02d-%02d %s", session.SessionDate.Year(), session.SessionDate.Month(), session.SessionDate.Day(), session.TimeStart)
 	endStr := fmt.Sprintf("%04d-%02d-%02d %s", session.SessionDate.Year(), session.SessionDate.Month(), session.SessionDate.Day(), session.HourEnd)
 	
-	layout := "2006-01-02 15:04:05" 
+	layout := "2006-01-02 15:04:05"
 	startTime, _ := time.ParseInLocation(layout, startStr, loc)
 	endTime, _ := time.ParseInLocation(layout, endStr, loc)
 

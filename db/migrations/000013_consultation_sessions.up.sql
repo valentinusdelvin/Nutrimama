@@ -7,8 +7,7 @@ CREATE TABLE consultation_sessions (
     hour_end TIME NOT NULL,
     total_price DECIMAL(10,2) NOT NULL DEFAULT 0,
     payment_status VARCHAR(20) DEFAULT 'unpaid',
-    status VARCHAR(20) DEFAULT 'scheduled',
-    CHECK (hour_end > time_start)
+    status VARCHAR(20) DEFAULT 'scheduled'
 );
 
 ALTER TABLE messages ADD COLUMN consultation_id BIGINT UNSIGNED REFERENCES consultation_sessions(consultation_id) ON DELETE CASCADE;
