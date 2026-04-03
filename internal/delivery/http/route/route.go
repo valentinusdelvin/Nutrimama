@@ -23,7 +23,7 @@ type RouteConfig struct {
 }
 
 func (c *RouteConfig) Setup() {
-	c.App.Static("/uploads", "./public/uploads")
+	c.App.Static("/daris/uploads", "./public/uploads")
 
 	SetupGuestRoutes(c)
 	SetupProtectedRoutes(c)
