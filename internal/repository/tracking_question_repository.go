@@ -19,6 +19,6 @@ func NewTrackingQuestionRepository() *TrackingQuestionRepository {
 // FindByCategory fetches all questions for a specific target group (e.g., 'ibu_hamil' or 'balita')
 func (r *TrackingQuestionRepository) FindByCategory(db *gorm.DB, category string) ([]entity.Question, error) {
 	var questions []entity.Question
-	err := db.Preload("Options").Where("category = ?", category).Order("display_order ASC").Find(&questions).Error
+	err := db.Preload("QuestionOptions").Where("category = ?", category).Order("display_order ASC").Find(&questions).Error
 	return questions, err
 }
