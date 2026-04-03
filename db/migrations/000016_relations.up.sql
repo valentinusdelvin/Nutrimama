@@ -1,56 +1,56 @@
 
-ALTER TABLE `children`
-    MODIFY `pregnancy_id` bigint UNSIGNED NULL,
-    MODIFY `mother_id` bigint UNSIGNED NULL;
+-- ALTER TABLE `children`
+--     MODIFY `pregnancy_id` bigint UNSIGNED NULL,
+--     MODIFY `mother_id` bigint UNSIGNED NULL;
 
-ALTER TABLE `mothers`
-    MODIFY `user_id` bigint UNSIGNED NOT NULL;
+-- ALTER TABLE `mothers`
+--     MODIFY `user_id` bigint UNSIGNED NOT NULL;
 
-ALTER TABLE `pregnancies`
-    MODIFY `mother_id` bigint UNSIGNED NOT NULL;
+-- ALTER TABLE `pregnancies`
+--     MODIFY `mother_id` bigint UNSIGNED NOT NULL;
 
-ALTER TABLE `consultation_sessions`
-    MODIFY `mother_id` bigint UNSIGNED NOT NULL,
-    MODIFY `consultant_id` bigint UNSIGNED NOT NULL;
+-- ALTER TABLE `consultation_sessions`
+--     MODIFY `mother_id` bigint UNSIGNED NOT NULL,
+--     MODIFY `consultant_id` bigint UNSIGNED NOT NULL;
 
-ALTER TABLE `messages`
-    MODIFY `consultant_id` bigint UNSIGNED NULL,
-    MODIFY `mother_id` bigint UNSIGNED NULL;
+-- ALTER TABLE `messages`
+--     MODIFY `consultant_id` bigint UNSIGNED NULL,
+--     MODIFY `mother_id` bigint UNSIGNED NULL;
 
-ALTER TABLE `user_tracking_logs`
-    MODIFY `tracking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `mother_id` bigint UNSIGNED NULL,
-    MODIFY `pregnancy_id` bigint UNSIGNED NULL,
-    MODIFY `child_id` bigint UNSIGNED NULL;
+-- ALTER TABLE `user_tracking_logs`
+--     MODIFY `tracking_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+--     MODIFY `mother_id` bigint UNSIGNED NULL,
+--     MODIFY `pregnancy_id` bigint UNSIGNED NULL,
+--     MODIFY `child_id` bigint UNSIGNED NULL;
 
-ALTER TABLE `nutrition_tracking`
-    MODIFY `track_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `mother_id` bigint UNSIGNED NULL,
-    MODIFY `child_id` bigint UNSIGNED NULL;
+-- ALTER TABLE `nutrition_tracking`
+--     MODIFY `track_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+--     MODIFY `mother_id` bigint UNSIGNED NULL,
+--     MODIFY `child_id` bigint UNSIGNED NULL;
 
-ALTER TABLE `meal_plans`
-    MODIFY `meal_plan_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `mother_id` bigint UNSIGNED NOT NULL;
+-- ALTER TABLE `meal_plans`
+--     MODIFY `meal_plan_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+--     MODIFY `mother_id` bigint UNSIGNED NOT NULL;
 
-ALTER TABLE `food_logs`
-    MODIFY `food_log_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `meal_plan_id` bigint UNSIGNED NOT NULL,
-    MODIFY `food_id` bigint UNSIGNED NOT NULL;
+-- ALTER TABLE `food_logs`
+--     MODIFY `food_log_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+--     MODIFY `meal_plan_id` bigint UNSIGNED NOT NULL,
+--     MODIFY `food_id` bigint UNSIGNED NOT NULL;
 
-ALTER TABLE `foods`
-    MODIFY `food_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+-- ALTER TABLE `foods`
+--     MODIFY `food_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `user_bookmarks`
-    MODIFY `bookmark_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `user_id` bigint UNSIGNED NOT NULL,
-    MODIFY `edu_tools_id` bigint UNSIGNED NOT NULL;
+-- ALTER TABLE `user_bookmarks`
+--     MODIFY `bookmark_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+--     MODIFY `user_id` bigint UNSIGNED NOT NULL,
+--     MODIFY `edu_tools_id` bigint UNSIGNED NOT NULL;
 
-ALTER TABLE `questions`
-    MODIFY `question_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+-- ALTER TABLE `questions`
+--     MODIFY `question_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `question_options`
-    MODIFY `option_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    MODIFY `question_id` bigint UNSIGNED NULL;
+-- ALTER TABLE `question_options`
+--     MODIFY `option_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+--     MODIFY `question_id` bigint UNSIGNED NULL;
 
 
 
